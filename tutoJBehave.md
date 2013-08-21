@@ -647,10 +647,10 @@ When je soustrais 5 moins 2
 Then le resultat est 3
 ```
 
-Si on considère les trois premiers scénarios, on identifie clairement des lignes qui se dupliquent 
-Il est possible de factoriser ces descriptions et de les regrouper au sein d'un même scénario qui sera **paramétré** grâce au mot clé  **`Examples`**
+La lecture des trois premiers scénarios montrent une duplication dans le descriptif des étapes. 
+Il est possible de factoriser ces descriptions et de les regrouper au sein d'un même scénario dit **paramétré** grâce au mot clé  **`Examples`**
 
-Un **scénario paramétré** correspondant aux trois premiers scénarios pourrait être le suivant :
+Remplacez lez trois premiers scénarios par un **scénario paramétré**, par exemple:
 ```GHERKIN
 Scenario: Addition de deux nombres valides
 Given une calculatrice
@@ -666,7 +666,7 @@ Examples:
 
 
 Exécutez `CalculatriceAddition.java` …
-Le rapport de la console nous indique que l'étape `When` est `FAILED`. En effet, la description textuelle a changé, puisque précédemment vous utilisiez des valeurs dans votre description et maintenant ce sont des paramètres.Vous devez ajouter un **alias** sur `@When` :
+Le rapport de la console indique que l'étape `When` est `FAILED`. En effet, la description textuelle a changé, puisque qu'elle comporte maintenant des paramètres alors que précédemment elle comportait directement des valeurs. Il est donc nécessaire d'ajouter un **alias** sur `@When` :
 ```JAVA
 @When("j'additionne $nombre1 et $nombre2")
 @Alias("j'additionne <nombre1> et <nombre2>")
@@ -674,8 +674,7 @@ Le rapport de la console nous indique que l'étape `When` est `FAILED`. En effet
 
 Exécutez `CalculatriceAddition.java`.
 
-Rajoutez l'annotation ne suffit pas. Avec des tables de paramètres, il est obligatoire de nommer les paramètres avec `@Named` comme le préconise la partie [Parametrised Scenarios](http://jbehave.org/reference/stable/parametrised-scenarios.html) du tutoriel de Jbehave.
-L'imlémentation de l'étape `@When` doit ressembler à :
+Mais, rajoutez l'alias ne suffit pas... Avec des tables de paramètres, il est obligatoire de nommer les paramètres avec `@Named` comme le préconise la partie [Parametrised Scenarios](http://jbehave.org/reference/stable/parametrised-scenarios.html) du tutoriel de Jbehave :
 ``` JAVA
 @When("j'additionne $nombre1 et $nombre2")
 @Alias("j'additionne <nombre1> et <nombre2>")
@@ -686,7 +685,7 @@ public void whenAdditionner(@Named("nombre1")int nombre1, @Named("nombre2")int n
 ```
 
 
-Exécutez `CalculatriceAddition.java`... Le rapport de la console nous indique que l'étape `Then` est `FAILED`.
+Exécutez `CalculatriceAddition.java`... Le rapport de la console indique que l'étape `Then` est `FAILED`.
 Modifiez cette étape avec un `@Alias` (ou `@Aliases`) et une annotation `@Named`.
 ```JAVA 
 @Then("le resultat doit \u00EAtre \u00E9gal \u00E0 $resultat")
@@ -705,7 +704,7 @@ Lors de l'écriture des scénarios, les trois mots clés `Given`, `When`, et `Th
 Mais, un seul mot clé `Given`, un seul mot clé `When`, et un seul mot clé `Then` peuvent être utilisés. 
 
 Le mot clé `And` va permettre d'enrichir la description des scénarios. Par exemple, si deux étapes `When` doivent être décrites, le mot clé `When` décrira la première et le mot clé `And` la seconde.
-Pour la calculatrice nous aurions pu par exemple écrire le scénario suivant :
+Pour la calculatrice, il aurait été possible par exemple d'écrire le scénario suivant :
 ```GHERKIN
 Scenario: une autre description de l'addition 
 Given une calculatrice
@@ -716,7 +715,7 @@ When l'utilisateur appuie sur la touche =
 Then le resultat est 3
 ```
 
-Le mot clé `And` permet de rajouter une étape supplémentaire au scénario. Il  ne peut se trouver qu'après un des 3 mots clés de base: `Given`, `When`, et `Then` ou après un autre `And`. Il peut y avoir autant de `And` que le nécessite la description.
+Le mot clé `And` permet de rajouter une étape supplémentaire au scénario. Il  ne peut se trouver qu'après un des trois mots clés de base `Given`, `When`, et `Then` ou après un autre `And`. Il peut y avoir autant de `And` que le nécessite la description.
 
 
 ### Des stories en français ...
@@ -728,7 +727,7 @@ La partie Configurable Elements du chapitre [Configuration](http://jbehave.org/r
 Voici une méthode simple pour personnaliser vos mots clés et faciliter l'écriture et la compréhension de vos scénarios.
 Il suffit de modifier la configuration via la méthode `public Configuration useKeywords(Keywords keywords)` qui prendra en paramètres vos propores mots clés.
 
-Les modifications à effectuer pour mettre en place une internationalisation des mots clés concerne donc le lanceur de story c-à-d la classe `CalculatriceAddition.story`
+Les modifications à effectuer pour mettre en place une internationalisation des mots clés concerne donc le lanceur de story c-à-d la classe `CalculatriceAddition.java`
 
 ```JAVA
 public class CalculatriceAddition  extends JUnitStory {
