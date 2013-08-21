@@ -718,3 +718,50 @@ Then le resultat est 3
 
 Le mot clé `And` permet de rajouter une étape supplémentaire au scénario. Il  ne peut se trouver qu'après un des 3 mots clés de base: `Given`, `When`, et `Then` ou après un autre `And`. Il peut y avoir autant de `And` que le nécessite la description.
 
+
+### Des stories en français ...
+Par défaut la syntaxe Jbehave est en anglais. Or, la réussite d'un projet BDD est fortement liée à l'écriture des stories de manière collaborative dans un langage naturel et compris de tous.
+Il est donc important de pouvoir configurer les mots clés de Jbehave dans une autre langue.
+
+La partie Configurable Elements du chapitre [Configuration](http://jbehave.org/reference/stable/configuration.html) du tutoriel Jbehave indique qu'il est possible de configurer les mots clés ([Keywords](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/configuration/Keywords.html)).
+
+Voici une méthode simple pour personnaliser vos mots clés et faciliter l'écriture et la compréhension de vos scénarios.
+Il suffit de modifier la configuration via la méthode `public Configuration useKeywords(Keywords keywords)` qui prendra en paramètres vos propores mots clés.
+
+Les modifications à effectuer pour mettre en place une internationalisation des mots clés concerne donc le lanceur de story c-à-d la classe `CalculatriceAddition.story`
+
+```JAVA
+public class CalculatriceAddition  extends JUnitStory {
+	
+	@Override
+	public Configuration configuration( ) {
+		//code déjà écrit...	
+		  
+		//Internationalisation
+		 configuration.useKeywords(setKeyWords());
+
+		  return configuration;
+		 }
+
+	//code déjà écrit...
+
+	//Ne pas oublier de rajouter la méthode privée setKeyWords
+	// pour mettre en place la francisation des mots clés ...
+	private Keywords setKeyWords() {
+	    	Map<String, String> keywords = Keywords.defaultKeywords();
+	        keywords.put(Keywords.GIVEN, "Soit");
+	        keywords.put(Keywords.WHEN, "Quand");
+	        keywords.put(Keywords.THEN, "Alors");
+	        keywords.put(Keywords.AND, "Et");
+			return new Keywords(keywords);
+	 }
+		
+ }
+```
+
+Exécutez `CalculatriceAddition.java`.Si vous n'avez pas changé les mots clés dans le fichier `calculatrice_addition.story`, vous aurez des erreurs...
+
+Remplacez donc tous les `Given` par des `Soit`, tous les `When` par des `Quand` et tous les `Then` par des `Alors` …
+Exécutez `CalculatriceAddition.java` et vérifier que les tests passent désormais au vert !
+ 
+

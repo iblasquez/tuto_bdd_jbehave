@@ -695,7 +695,7 @@ Modifiez cette étape avec un `@Alias` (ou `@Aliases`) et une annotation `@Named
 public void thenLeResultatEst(@Named("somme")int resultat) {
    Assert.assertEquals(resultat, calculatrice.getResultat());
    }
-
+```
 Exécutez `CalculatriceAddition.java` et vérifier que les tests passent désormais au vert !
 
 
