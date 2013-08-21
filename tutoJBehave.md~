@@ -555,12 +555,12 @@ public void thenLeResultatEst(int resultat) {
 ```
 
 #### Expressions Régulières : pattern variants
-Les alias permettent d'exprimer de manière différente la description textuelle d'une même étape.
-Si la différence textuelle est petite (autour d'un mot par exemple), il pourra être moins fastidieux d'utiliser un **pattern** plutôt qu'un |`@Alias`. Jbehave supporte des **directives de pattern**.
+Les alias permettent d'exprimer autrement la description textuelle d'une même étape.
+Si la différence textuelle est petite (autour d'un mot par exemple), il est préférable d'utiliser un **pattern** plutôt qu'un `@Alias`. 
 
-Reformulez l'étape `Then` du deuxième scénario de la manière suivante : `Then la somme est 100`
+Reformulez l'étape `Then` du deuxième scénario : `Then la somme est 100`
 
-Grâce aux directives de patterns `{|}`, vous allez pouvoir regrouper dans la valeur de l'annotation `@Alias`, à la fois la description de l'étape `Then` du deuxième scénario et celle du troisième scénario.
+Grâce aux **directives de patterns `{|}`**, vous allez pouvoir regrouper dans la valeur de l'annotation `@Alias`, à la fois la description de l'étape `Then` du deuxième scénario et celle du troisième scénario.
 ```JAVA
 @Then("le resultat doit \u00EAtre \u00E9gal \u00E0 $resultat")
 	@Alias("{le resultat| la somme} est $resultat")
@@ -571,7 +571,7 @@ Grâce aux directives de patterns `{|}`, vous allez pouvoir regrouper dans la va
 
 Exécutez `CalculatriceAddition.java` pour vérifier que les tests passent toujours au vert. 
 
-La construction des patterns Jbehave doit s'appuyer sur le [`PatternVariantBuilder`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/PatternVariantBuilder.html). Le tutoriel JBehave consacre une partie aux [Patterns variants](http://jbehave.org/reference/stable/pattern-variants.html)
+Le tutoriel JBehave consacre une partie aux [Patterns variants](http://jbehave.org/reference/stable/pattern-variants.html). La construction des patterns Jbehave s'appuye sur le [`PatternVariantBuilder`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/PatternVariantBuilder.html).
 
 #### Utilisation de l'annotation `@Named`
 
@@ -584,7 +584,7 @@ Then le resultat est 3
 ```
 
 Les étapes `Given` et `Then` sont déjà implémentées. Exécutez `CalculatriceAddition.java` afin de récupérer dans la console le squelette de code proposé par le rapport pour l'étape: `When je soustrais 5 moins 2`
-Implémentez cette étape de la manière suivante par exemple :
+et implémentez cette étape :
 ```JAVA
 @When("je soustrais $nombre1 moins $nombre2")
    public void whenSoustraire(int nb1, int nb2) {
@@ -595,7 +595,7 @@ Implémentez cette étape de la manière suivante par exemple :
 Exécutez `CalculatriceAddition.java` pour vérifier que les tests passent toujours au vert. 
 Rappelons que, par défaut, les variables de l'annotation sont injectées en paramètre dans la méthode java dans leur ordre d'appartition. Ainsi, la variable `$nombre1` sera injectée comme premier paramètre `nb1` et la variable `$nombre2` comme second parametre `nb2`. 
 
-Modifiez le code de la méthode `whenAdditionner` de la manière suivante :
+Modifiez le code de la méthode `whenSoustraire` de la manière suivante :
 ```JAVA
 @When("je soustrais $nombre1 moins $nombre2")
    public void whenSoustraire(@Named("nombre1") int nb1, @Named("nombre2")int nb2) {
@@ -615,11 +615,106 @@ Inverser les annotations `@Named`:
 ```
 
 Exécutez `CalculatriceAddition.java` et constatez que les tests sont désormais rouges !
-En effet, l'annotation `@Named` permet de renommer les paramètres.
-Par défaut, les variables de l'annotation sont injectés en tant que paramètre dans leur ordre d'apparition. Si cet ordre ne convient pas, il est possible d'annoter chaque paramètre par `@Named`, pour indiquer explicitement la variable qu'il référence. L'annotation `@Named` permet ainsi de jouer sur l'ordre des paramètres. 
 
-Remettre les annotations @Named correctement afin que les tests passent au vert pour le suite du tutoriel.
+L'annotation `@Named` permet de renommer les paramètres.
+Par défaut, les variables de l'annotation sont injectées en tant que paramètres dans leur ordre d'apparition. Si cet ordre ne convient pas, il est possible d'annoter chaque paramètre par `@Named`, pour indiquer explicitement la variable qu'il référence. L'annotation `@Named` permet de renommer les paramètres, elle permet ainsi de jouer sur l'ordre des paramètres. 
+
+Remettre les annotations `@Named` correctement afin que les tests passent au vert pour le suite du tutoriel.
+
+### Scénarios paramétrés
+
+Reprenez l'ensemble des scénarios du fichier `calculatrice_addition.story` :
+
+```GHERKIN
+Scenario: Addition de deux nombres valides
+Given une calculatrice
+When j'additionne 1 et 2 
+Then le resultat doit être égal à 3
+
+Scenario: une autre addition de deux nombres valides
+Given une calculatrice
+When j'additionne 99 et 1 
+Then la somme est 100
+
+Scenario: une dernière addition de deux nombres valides
+Given une calculatrice
+When j'additionne 0 et 1000
+Then le resultat est 1000
+
+Scenario: la soustraction: une addition particulière 
+Given une calculatrice
+When je soustrais 5 moins 2
+Then le resultat est 3
+```
+
+Si on considère les trois premiers scénarios, on identifie clairement des lignes qui se dupliquent 
+Il est possible de factoriser ces descriptions et de les regrouper au sein d'un même scénario qui sera **paramétré** grâce au mot clé  **`Examples`**
+
+Un **scénario paramétré** correspondant aux trois premiers scénarios pourrait être le suivant :
+```GHERKIN
+Scenario: Addition de deux nombres valides
+Given une calculatrice
+When j'additionne <nombre1> et <nombre2> 
+Then la somme est <somme>
+
+Examples:
+|nombre1|nombre2|somme|
+|1|2|3|
+|99|1|100|
+|0|1000|1000|
+```
 
 
+Exécutez `CalculatriceAddition.java` …
+Le rapport de la console nous indique que l'étape `When` est `FAILED`. En effet, la description textuelle a changé, puisque précédemment vous utilisiez des valeurs dans votre description et maintenant ce sont des paramètres.Vous devez ajouter un **alias** sur `@When` :
+```JAVA
+@When("j'additionne $nombre1 et $nombre2")
+@Alias("j'additionne <nombre1> et <nombre2>")
+```
 
+Exécutez `CalculatriceAddition.java`.
+
+Rajoutez l'annotation ne suffit pas. Avec des tables de paramètres, il est obligatoire de nommer les paramètres avec `@Named` comme le préconise la partie [Parametrised Scenarios](http://jbehave.org/reference/stable/parametrised-scenarios.html) du tutoriel de Jbehave.
+L'imlémentation de l'étape `@When` doit ressembler à :
+``` JAVA
+@When("j'additionne $nombre1 et $nombre2")
+@Alias("j'additionne <nombre1> et <nombre2>")
+public void whenAdditionner(@Named("nombre1")int nombre1, @Named("nombre2")int nombre2) 
+   {
+   calculatrice.additionner(nombre1, nombre2);
+   }
+```
+
+
+Exécutez `CalculatriceAddition.java`... Le rapport de la console nous indique que l'étape `Then` est `FAILED`.
+Modifiez cette étape avec un `@Alias` (ou `@Aliases`) et une annotation `@Named`.
+```JAVA 
+@Then("le resultat doit \u00EAtre \u00E9gal \u00E0 $resultat")
+@Aliases(values={"{le|la} {resultat|somme} est $resultat",
+		 "la somme est <somme>"})
+public void thenLeResultatEst(@Named("somme")int resultat) {
+   Assert.assertEquals(resultat, calculatrice.getResultat());
+   }
+
+Exécutez `CalculatriceAddition.java` et vérifier que les tests passent désormais au vert !
+
+
+### A propos du mot clé `And`
+
+Lors de l'écriture des scénarios, les trois mots clés `Given`, `When`, et `Then` sont obligatoires pour définir les étapes du scénario. 
+Mais, un seul mot clé `Given`, un seul mot clé `When`, et un seul mot clé `Then` peuvent être utilisés. 
+
+Le mot clé `And` va permettre d'enrichir la description des scénarios. Par exemple, si deux étapes `When` doivent être décrites, le mot clé `When` décrira la première et le mot clé `And` la seconde.
+Pour la calculatrice nous aurions pu par exemple écrire le scénario suivant :
+```GHERKIN
+Scenario: une autre description de l'addition 
+Given une calculatrice
+And l'utilisateur saisit 1 sur la calculatrice
+And l'utilisateur appuie sur la touche +
+And l'utilisateur saisit 2 sur la calculatrice
+When l'utilisateur appuie sur la touche =
+Then le resultat est 3
+```
+
+Le mot clé `And` permet de rajouter une étape supplémentaire au scénario. Il  ne peut se trouver qu'après un des 3 mots clés de base: `Given`, `When`, et `Then` ou après un autre `And`. Il peut y avoir autant de `And` que le nécessite la description.
 
