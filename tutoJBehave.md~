@@ -616,9 +616,9 @@ Inverser les annotations `@Named`:
 
 Exécutez `CalculatriceAddition.java` et constatez que les tests sont désormais rouges !
 En effet, l'annotation `@Named` permet de renommer les paramètres.
-Par défaut, les variables de l'annotation sont injectées en tant que paramètres dans leur ordre d'apparition. Si cet ordre ne convient pas, il est possible d'annoter chaque paramètre par `@Named`, pour indiquer explicitement la variable qu'il référence. L'annotation `@Named` permet ainsi de jouer sur l'ordre des paramètres. 
+Par défaut, les variables de l'annotation sont injectés en tant que paramètre dans leur ordre d'apparition. Si cet ordre ne convient pas, il est possible d'annoter chaque paramètre par `@Named`, pour indiquer explicitement la variable qu'il référence. L'annotation `@Named` permet ainsi de jouer sur l'ordre des paramètres. 
 
-Remettre les annotations `@Named` correctement afin que les tests passent au vert pour le suite du tutoriel.
+Remettre les annotations @Named correctement afin que les tests passent au vert pour le suite du tutoriel.
 
 
 
