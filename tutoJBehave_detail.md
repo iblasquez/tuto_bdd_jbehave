@@ -29,9 +29,10 @@ La mise en place d'un projet BDD sous JBehave se fera en plusieurs étapes :
 1. Création d'un projet Maven
 2. Ajout de dépendances Maven (`pom.xml`)
 3. Description textuelle d'une story et de ses scénarios exécutables dans un fichier `nom_story.story`
-4. Configuration de l'environnement de tests des scénarios (fichier java)
-(Implémentation d'un lanceur héritant de `JunitStory` ou `JunitStories` permettant de  lier les scénarios et le code)
-5. Implémentation Java de chaque étape des scénarios de la story dans un fichier `NomStorySteps.java`
+4. Configuration de l'environnement de tests des scénarios (fichier java dans `src/test/java`)
+(Implémentation d'un lanceur héritant de [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) ou [`JUnitStories`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStories.html) permettant de  lier les scénarios au code)
+5. Implémentation du code de test pour chaque étape des scénarios de la story dans un fichier `NomStorySteps.java` (dans `src/test/java`)
+6. Implémentation en TDD du code métier de l'application (dans `src/main/java`)
 
 
 ### Création d'un projet Maven
@@ -180,7 +181,7 @@ Une fois la story écrite, vérifiez que les mots clés de la syntaxe JBehave ap
 
 ### Configuration de l'environnement de tests des scénarios
 Une fois, les scénarios décrits avec la syntaxe JBehave, il est donc nécessaire de s'interroger sur comment lancer ces scénarios de manière automatique et surtout comment visualiser les résultats obtenus, ce qui revient à configurer l'environnement de tests de nos scénarios.
-Dans la partie [Running Stories](http://jbehave.org/reference/stable/running-stories.html), le tutoriel de JBehave indique plusieurs possibilités pour configurer l’environnement d'exécution de tests des scénarios. Dans tous les cas, la contrainte à respecter est que la classe qui lance les scénarios doit être un [`Embedder`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/embedder/Embedder.html). 
+La partie [Running Stories](http://jbehave.org/reference/stable/running-stories.html) du tutoriel de JBehave indique plusieurs possibilités pour configurer l’environnement d'exécution de tests des scénarios. Dans tous les cas, la contrainte à respecter est que la classe qui lance les scénarios doit être un [`Embedder`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/embedder/Embedder.html). 
 
 Il serait bien sûr possible d'écrire son propre [`Embedder`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/embedder/Embedder.html). , de l'exécuter dans un `main`(voir annexe 1) et de lire les résultats sur la console. Afin de simplifier le code, nous préférons utiliser directement un lanceur du [framework JUnit](http://junit.org/) ([`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) ou [`JUnitStories`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStories.html)).
 En effet JBehave propose une intégration de JUnit grâce au paquetage de base `org.jbehave.core.junit` et aux deux classes [`Embeddable`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/Embeddable.html):
@@ -195,34 +196,39 @@ En effet JBehave propose une intégration de JUnit grâce au paquetage de base `
 Pour l'instant vous n'avez créé qu'une seule story, le lanceur qui hérite de [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) est donc suffisant pour configurer l'environnement de tests.
 Attention par défaut le lanceur (fichier `.java`) supposera qu'il existe dans le même répertoire un fichier contenant les scénarios textuels (fichier `.story`) ayant le même nom mais avec une casse différente : les majuscules de la casse CamelCase du nom du fichier `.java` devenant des minuscules précédées d'un underscore (hormis la première) dans le nom du fichier `.story`.
 Ainsi pour un lanceur nommé `NomStory.java`, JBehave cherchera, par défaut dans le même paquetage, à lancer le fichier de scénarios `nom_story.story`. S'il ne le trouve pas, il générera une erreur. Pour le lanceur, il est donc important de respecter la casse et l'emplacement lorsque [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) est utilisé.
+
 Dans le package de `src/test/java` qui contient déjà le fichier de scénarios `calculatrice_addtition.story`, créez et implémentez le lanceur `CalculatriceAddition.java` de la manière suivante :
 
 ```JAVA
+package fr.cnrs.devlog.jdev.demobdd;
+
 import org.jbehave.core.junit.JUnitStory;
-public class CalculatriceAddition  extends JUnitStory {
-	 public CalculatriceAddition() {
+
+public class CalculatriceAddition extends JUnitStory {
+	public CalculatriceAddition() {
 		super();
 		this.configuredEmbedder().candidateSteps().add(new AdditionSteps());
 	}
- }
+}
 ```
 
-Le lanceur permet de faire le mapping entre les étapes des scénarios écrites de manière textuelle (`calculatrice_addition.story`) et les méthodes Java implémentant ces étapes (`AdditionSteps.java`) 
+Le lanceur permet de faire le mapping entre les étapes des scénarios écrites de manière textuelle (`calculatrice_addition.story`) et les méthodes Java implémentant ces étapes (`AdditionSteps.java`).
 Pour pouvoir exécuter le lanceur, vous devez maintenant créer la classe `AdditionSteps.java` de la manière suivante. N'oubliez pas l'héritage sur [`Steps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/Steps.html) (qui est une implémentation par défaut de l'interface [`CandidateSteps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/CandidateSteps.html)) !
 
 ```JAVA
+package fr.cnrs.devlog.jdev.demobdd;
+
 import org.jbehave.core.steps.Steps;
+
 public class AdditionSteps extends Steps {
+
 }
 ```
 
 
 Lancez maintenant la classe `CalculatriceAddition` comme un test unitaire ( **Run As →JUnit Test** )
 
-Le test est au vert et la console nous indique :
-```
-Reports view generated with 1 stories (of which 1 pending) containing 1 scenarios (of which 1 pending)
-```
+Le test est au vert et la console indique un message commençant par `Reports view generated`.
 
 Chaque test JBehave est lancé de manière indépendante. A la fin de chaque test, JBehave consolide les résultats dans un unique rapport. Les rapports sont un élément essentiel qui permettent de vérifier si les stories se sont correctement exécutées. Il est donc indispensable de pouvoir visualiser le contenu de ces rapports...
 
@@ -253,9 +259,7 @@ public Configuration configuration() {
 	 }
 ```
 
-La classe [MostUsefulConfiguration](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/configuration/MostUsefulConfiguration.html) contient les configurations par défaut. 
-
-Ajoutez à cette configuration de base un [StoryReporterBuilder](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/reporters/StoryReporterBuilder.html) personnalisé associé à la console. 
+La classe [MostUsefulConfiguration](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/configuration/MostUsefulConfiguration.html) contient les configurations par défaut.  A cette configuration de base, un [StoryReporterBuilder](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/reporters/StoryReporterBuilder.html) personnalisé est associé à la console. 
 
 Exécutez la classe  `CalculatriceAddition.java` afin de vous assurer que vous visualisez bien désormais le contenu du rapport dans la console. Nous reviendrons sur le contenu dans la suite du tutoriel.
 
@@ -322,15 +326,15 @@ public class CalculatriceAddition extends JUnitStory {
 		return configuration;
 	}
 	
-	  @Override
-	    public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new AdditionSteps());
-	    }
+	@Override
+    	public InjectableStepsFactory stepsFactory() {
+		return new InstanceStepsFactory(configuration(), new AdditionSteps());
+    	}
 }
 ```
 
 Vous pouvez maintenant modifier la déclaration de la classe `AdditionSteps` en supprimant l'héritage.
-La classe `AdditionSteps` sera bien considérée comme [`CandidateSteps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/CandidateSteps.html) parJBehave grâce à l'injection, mais « vue de l'exétrieur » elle apparaît désormais simplement comme une "Plain Old Java Class".
+La classe `AdditionSteps` apparaît désormais "vue de l'extérieur" simplement comme une "Plain Old Java Class" mais elle sera bien considérée comme [`CandidateSteps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/CandidateSteps.html) parJBehave grâce à l'injection.
 
 ```JAVA
 public class AdditionSteps {
@@ -463,22 +467,24 @@ Par défaut, les variables de l'annotation sont injectées en paramètres de la 
 
 N'oubliez pas de supprimez l'annotation `@Pending` et d'implémentez le plus simplement possible  la classe `Calculatrice.java`. 
 ```JAVA
+package fr.cnrs.devlog.jdev.demobdd;
+
 public class Calculatrice {
 
 	int resultat;
-	
+
 	public void additionner(int operande1, int operande2) {
 		resultat = operande1 + operande2;
-		
+
 	}
-	
+
 	public int getResultat() {
 		return resultat;
 	}
+
+}
  ```
 **Remarque** : Dans le cas d'un projet plus complexe, l'implémentation de cette classe métier pourrait se faire par une approche de type **TDD**.
-
-Exécutez la classe `CalculatriceAddition.java` et vérifiez que tous les tests passent bien au vert.
 
 
 Vous devez maintenant implémenter la méthode correspondant à l'annotation `@Then` dans laquelle le résultat doit également apparaître comme une variable. Voici une implémentation possible pour cette méthode qui a été également renommée :
@@ -561,10 +567,10 @@ Reformulez l'étape `Then` du deuxième scénario : `Then la somme est 100`
 Grâce aux **directives de patterns `{|}`**, vous allez pouvoir regrouper dans la valeur de l'annotation `@Alias`, à la fois la description de l'étape `Then` du deuxième scénario et celle du troisième scénario.
 ```JAVA
 @Then("le resultat doit \u00EAtre \u00E9gal \u00E0 $resultat")
-	@Alias("{le resultat| la somme} est $resultat")
-	public void thenLeResultatEst(int resultat) {
-		Assert.assertEquals(resultat, calculatrice.getResultat());
-	}
+@Alias("{le resultat|la somme} est $resultat")
+public void thenLeResultatEst(int resultat) {
+	Assert.assertEquals(resultat, calculatrice.getResultat());
+}
 ```
 
 Exécutez `CalculatriceAddition.java` pour vérifier que les tests passent toujours au vert. 
@@ -585,9 +591,9 @@ Les étapes `Given` et `Then` sont déjà implémentées. Exécutez `Calculatric
 et implémentez cette étape :
 ```JAVA
 @When("je soustrais $nombre1 moins $nombre2")
-   public void whenSoustraire(int nb1, int nb2) {
-     calculatrice.additionner(nb1, -nb2);
-     }
+public void whenSoustraire(int nb1, int nb2) {
+	calculatrice.additionner(nb1, -nb2);
+}
 ```
 
 Exécutez `CalculatriceAddition.java` pour vérifier que les tests passent toujours au vert. 
@@ -596,9 +602,9 @@ Rappelons que, par défaut, les variables de l'annotation sont injectées en par
 Modifiez le code de la méthode `whenSoustraire` de la manière suivante :
 ```JAVA
 @When("je soustrais $nombre1 moins $nombre2")
-   public void whenSoustraire(@Named("nombre1") int nb1, @Named("nombre2")int nb2) {
+public void whenSoustraire(@Named("nombre1") int nb1, @Named("nombre2")int nb2) {
      calculatrice.additionner(nb1, -nb2);
-     }
+}
 ```
 
 Exécutez `CalculatriceAddition.java` pour vérifier que les tests passent toujours au vert. 
@@ -676,8 +682,7 @@ Mais, rajoutez l'alias ne suffit pas... Avec des tables de paramètres, il est o
 ``` JAVA
 @When("j'additionne $nombre1 et $nombre2")
 @Alias("j'additionne <nombre1> et <nombre2>")
-public void whenAdditionner(@Named("nombre1")int nombre1, @Named("nombre2")int nombre2) 
-   {
+public void whenAdditionner(@Named("nombre1")int nombre1, @Named("nombre2")int nombre2) {
    calculatrice.additionner(nombre1, nombre2);
    }
 ```
@@ -687,11 +692,11 @@ Exécutez `CalculatriceAddition.java`... Le rapport de la console indique que l'
 Modifiez cette étape avec un `@Alias` (ou `@Aliases`) et une annotation `@Named`.
 ```JAVA 
 @Then("le resultat doit \u00EAtre \u00E9gal \u00E0 $resultat")
-@Aliases(values={"{le|la} {resultat|somme} est $resultat",
-		 "la somme est <somme>"})
-public void thenLeResultatEst(@Named("somme")int resultat) {
-   Assert.assertEquals(resultat, calculatrice.getResultat());
-   }
+@Aliases(values = { "{le resultat|la somme} est $resultat",
+	            "la somme est <somme>"})
+public void thenLeResultatEst(@Named("somme") int resultat) {
+	Assert.assertEquals(resultat, calculatrice.getResultat());
+}
 ```
 Exécutez `CalculatriceAddition.java` et vérifier que les tests passent désormais au vert !
 
