@@ -90,7 +90,7 @@ Mettez à jour votre `pom.xml` :
 ### 3. Description textuelle d'une story et de ses scénarios exécutables dans un fichier `nom_story.story` 
 Une story simple qui consiste à **faire une addition à l'aide d'une calculatrice**. La story et ses scénarios seront écrits dans `calculatrice_addition.story`.
 
-```GHERKIN
+```
 Narrative:
 In order to pouvoir faire des calculs le plus rapidement possible
 As a utilisateur
