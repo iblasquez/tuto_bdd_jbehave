@@ -88,28 +88,19 @@ Mettre à jour votre `pom.xml` :
 ### Description textuelle d'une Story et de ses scénarios exécutables 
 
 #### De la story « orale » à la story «textuelle» sous JBehave
-Une story doit respecter le modèle des 3C :  Carte, Conversation, Confirmation :
-
-- chaque User story doit être écrite de manière synthétique sur une **Carte**  et respecter le formalisme suivant :
-`As a <type of user>`   `I want <goal>`   `so that <reason>` 
-- chaque User Story doit faire l'objet de discussions au sein de l'équipe : une **Conversation** doit s'instaurer.
-- ces discussions ont pour but d'identifier les différents scénarios de la story.  Des critères d'acceptance, en rapport avec les différents scénarios identifiés, sont alors définis afin de permettre la **Confirmation** de la story.
-
 
 Dans **JBehave**, une **story** est composée de **scénarios** et chaque scénario est composé d' **étapes** (step) :
 - la description d'une story est introduite par le mot clé `Narrative` suivi de 3 éléments de narration  `In order to` , `As a` et `I want to`
 - chaque scénario est identifié par le mot clé `Scenario`. Ce mot clé peut être suivi ou non d'un titre qui décrit explicitement le critère d'acceptance de la story associé à ce scénario. Le mot clé `Scenario` est optionnel si la story n'est composé que d'un seul scénario.
-- les différentes étapes (steps) du scénario sont décrites à partir des 3 mots clés : `Given`, `When` et `Then`.Par abus de langage, le formalisme `Given` `When` `Then` est  appelé langage **Gherkin**. Gherkin est le langage utilisé par le framework **Cucumber** destiné à l'origine à Ruby, mais qui est également aujourd'hui très utilisé en Java via [Cucumber-JVM](https://github.com/cucumber/cucumber-jvm).
-
-JBehave propose quelques mots clés supplémentaires. La description complète de la grammaire de JBehave est consultable sur [http://JBehave.org/reference/stable/grammar.html](http://JBehave.org/reference/stable/grammar.html)
+- les différentes étapes (steps) du scénario sont décrites à partir des 3 mots clés : `Given`, `When` et `Then`. Par abus de langage, le formalisme `Given` `When` `Then` est  appelé langage **Gherkin**.  JBehave propose quelques mots clés supplémentaires. La description complète de la grammaire de JBehave est consultable sur [http://JBehave.org/reference/stable/grammar.html](http://JBehave.org/reference/stable/grammar.html)
 
 La documentation sur les différentes classes disponibles dans le framework JBehave est disponible sur : [http://JBehave.org/reference/stable/javadoc.html](http://JBehave.org/reference/stable/javadoc.html)
 
 #### Description de la user story à partir de la syntaxe JBehave : `nom_de_la_story.story` 
 
-La première étape consiste à écrire la story et ses scénarios dans un fichier `nom_de_la_story.story`. Notre première story consistera simplement à **faire une addition à l'aide d'une calculatrice**.
+La première étape consiste à écrire la story et ses scénarios dans un fichier `nom_de_la_story.story`. Votre première story consistera simplement à **faire une addition à l'aide d'une calculatrice**. La story et ses scénarios seront écrits dans un `calculatrice_addition.story`.
 
-Créez un fichier `calculatrice_addition.story`. Pour simplifier la prise en main de JBehave, ce fichier sera enregistré dans le dossier `src/test/java` (dans le paquetage  `fr.cnrs.devlog.jdev.demobdd`). Pour utiliser le plug-in JBehave, dans la vue **Package Explorer** placez-vous à l'endroit où vous souhaitez créer votre fichier (package `fr.cnrs.devlog.jdev.demobdd` du dossier `src/test/java`pour notre exemple). Un clic droit puis **New → Other... → Jbehave → New story** permettent d'entrer le nom de la story **calculatrice_addition**. 
+Pour utiliser le plug-in JBehave, placez-vous dans la vue **Package Explorer** à l'emplacement où vous souhaitez enregistrer la story (package `fr.cnrs.devlog.jdev.demobdd` du dossier `src/test/java`pour simplifier la prise en main de JBehave). Un clic droit puis **New → Other... → Jbehave → New story** permettent d'entrer le nom de la story **calculatrice_addition**. 
 
 Un fichier `calculatrice_addition.story` contenant un template est alors créé et ouvert dans l'éditeur de scénarios.
 
@@ -132,15 +123,13 @@ Eclipse indique des warnings de type *«No Step is matching»* sur chaque étape
 
 
 ### Configuration de l'environnement de tests des scénarios
-Une fois, les scénarios décrits avec la syntaxe JBehave, il est donc nécessaire de s'interroger sur comment lancer ces scénarios de manière automatique et surtout comment visualiser les résultats obtenus, ce qui revient à configurer l'environnement de tests de nos scénarios.
+Une fois, les scénarios décrits avec la syntaxe JBehave, il est nécessaire de s'interroger sur comment lancer ces scénarios de manière automatique et surtout comment visualiser les résultats obtenus, ce qui revient à configurer l'environnement de tests de nos scénarios.
 Dans la partie [Running Stories](http://jbehave.org/reference/stable/running-stories.html), le tutoriel de JBehave indique plusieurs possibilités pour configurer l’environnement d'exécution de tests des scénarios. Dans tous les cas, la contrainte à respecter est que la classe qui lance les scénarios doit être un [`Embedder`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/embedder/Embedder.html). 
 
-Il serait bien sûr possible d'écrire son propre [`Embedder`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/embedder/Embedder.html). , de l'exécuter dans un `main`(voir annexe 1) et de lire les résultats sur la console. Afin de simplifier le code, nous préférons utiliser directement un lanceur du framework JUnit ([`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) ou [`JUnitStories`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStories.html)).
-En effet JBehave propose une intégration de JUnit grâce au paquetage de base `org.jbehave.core.junit` et aux deux classes [`Embeddable`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/Embeddable.html):
+Une solution simple consiste à utiliser directement un lanceur du [framework JUnit](http://junit.org/). En effet, JBehave propose une intégration de base du framework  du [framework JUnit](http://junit.org/) en proposant deux classes [`Embeddable`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/Embeddable.html):
 - [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) qui permet de lancer une seule story
 - [`JUnitStories`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStories.html) qui permet de lancer plusieurs stories,
 
-*Remarque:* D'autres framework de tests tels que TestNG ou  Spring Test peuvent également être utilisé avec JBehave, mais leur intégration n'est pas de base comme pour JUnit.
 
 
 #### Implémentation d'un simple lanceur héritant de [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html)
