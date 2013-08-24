@@ -34,9 +34,12 @@ La mise en place d'un projet BDD sous JBehave se fera en plusieurs étapes :
 
 ### 1. Création d'un projet Maven
 
+Créez un nouveau projet Maven sous Eclipse : **File → New → Project... → Maven → Maven Project** avec par exemple `fr.cnrs.devlog.jdev` comme **groupId** et `demobdd` comme **artifactId**.
+
+
 ### 2. Ajout de dépendances Maven (`pom.xml`)
 
-Mettre à jour votre `pom.xml` :
+Mettez à jour votre `pom.xml` :
 - en rajoutant les propriétés `maven.compiler.source` et `maven.compiler.target` avec la version Java 1.7 
 - en vérifiant la version utilisée pour [JUnit](http://junit.org/)
 - en rajoutant une dépendance sur JBehave. Pour connaître la dernière version de JBehave, rendez-vous sur : [http://JBehave.org/download.html](http://JBehave.org/download.html) puis cliquez sur [Core Distribution](https://nexus.codehaus.org/content/repositories/releases/org/JBehave/JBehave-distribution/)
@@ -324,7 +327,7 @@ Mettre à jour votre `pom.xml` :
 	</dependencies>
 </project>
 ```
-*Remarque* : Sous Eclipse, une modification du `pom.xml` peut nécessiter une mise à jour du projet. Placez-vous sur le projet dans la vue Package Explorer, clic droit puis **Maven → Update Project** et cochez **Force Update et Snapshots/Releases**.
+*Remarque* : Sous Eclipse, une modification du `pom.xml` peut nécessiter une mise à jour du projet. Placez-vous sur le projet dans la vue Package Explorer, clic droit puis **Maven → Update Project** et cochez éventuellement **Force Update et Snapshots/Releases**.
 
 ### Description textuelle d'une Story et de ses scénarios exécutables 
 

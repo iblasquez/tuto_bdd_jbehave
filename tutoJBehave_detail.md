@@ -47,7 +47,7 @@ Saisissez un **artifactId** (identifiant de composant) : `demobdd` par exemple. 
 
 ###  Mise à jour des dépendances Maven
 
-Mettre à jour votre `pom.xml` :
+Mettez à jour votre `pom.xml` :
 
 - en rajoutant les propriétés `maven.compiler.source` et `maven.compiler.target` avec la version Java 1.7 
 - en vérifiant la version utilisée pour [JUnit](http://junit.org/)
@@ -89,7 +89,7 @@ Mettre à jour votre `pom.xml` :
 </project>
 ```
 
-*Remarque* : Sous Eclipse, une modification du `pom.xml` peut nécessiter une mise à jour du projet. Placez-vous sur le projet dans la vue Package Explorer, clic droit puis **Maven → Update Project** et cochez **Force Update et Snapshots/Releases**.
+*Remarque* : Sous Eclipse, une modification du `pom.xml` peut nécessiter une mise à jour du projet. Placez-vous sur le projet dans la vue Package Explorer, clic droit puis **Maven → Update Project** et cochez éventuellement **Force Update et Snapshots/Releases**.
 
 ### Description textuelle d'une Story et de ses scénarios exécutables 
 
