@@ -90,7 +90,7 @@ Mettez à jour votre `pom.xml` :
 ### 3. Description textuelle d'une story et de ses scénarios exécutables dans un fichier `nom_story.story` 
 Une story simple qui consiste à **faire une addition à l'aide d'une calculatrice**. La story et ses scénarios seront écrits dans `calculatrice_addition.story`.
 
-```Gherkin
+```GHERKIN
 Narrative:
 In order to pouvoir faire des calculs le plus rapidement possible
 As a utilisateur
@@ -107,7 +107,7 @@ Examples:
 |99|1|100|
 |0|1000|1000|
 
-Scenario: la soustraction : une addition particulière
+Scenario: la soustraction qui est une addition particulière
 Given une calculatrice
 When je soustrais 5 moins 2
 Then le resultat est 3
@@ -128,7 +128,7 @@ Un clic droit puis **New → Other... → Jbehave → New story** permettent d'e
 
 Le lanceur permet de faire le mapping entre les étapes des scénarios écrites de manière textuelle (`calculatrice_addition.story`) et les méthodes Java implémentant ces étapes (`AdditionSteps.java`). Il permet de configurer l'environnement de tests des scénarios c-à-d de s'interroger sur comment lancer les scénarios de manière automatique et surtout comment visualiser les résultats obtenus. 
 
-*Remarque :* La configuration ci-dessous proposée est minimale. Pour mettre en place une configuration plus complète de votre environnement de tests, consultez les parties [Reporting Stories](http://jbehave.org/reference/stable/reporting-stories.html), [Running Stories](http://jbehave.org/reference/stable/running-stories.html) [Configuration](http://jbehave.org/reference/stable/configuration.html), [Pending Steps](http://jbehave.org/reference/stable/pending-steps.html) du tutoriel proposé sur le site de [Jbehave](http://jbehave.org).
+*Remarque :* La configuration proposée ci-dessous est minimale. Pour mettre en place une configuration plus complète de votre environnement de tests, consultez les parties [Reporting Stories](http://jbehave.org/reference/stable/reporting-stories.html), [Running Stories](http://jbehave.org/reference/stable/running-stories.html), [Configuration](http://jbehave.org/reference/stable/configuration.html), [Pending Steps](http://jbehave.org/reference/stable/pending-steps.html) du tutoriel proposé sur le site de [Jbehave](http://jbehave.org).
 
 #### 4.1 Lanceur héritant de [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) pour une seule story
 
@@ -271,7 +271,7 @@ La complétion **Ctrl+J** permet de rechercher toutes les étapes déjà écrite
 
 
 
-##  Mise en place d'un premier projet BDD : en quelques mots ...
+##  Mise en place d'un premier projet BDD : en quelques mots
 
 
 ### Création d'un projet Maven
