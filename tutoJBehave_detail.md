@@ -11,7 +11,7 @@ Ce tutoriel va vous permettre de mettre en place pas à pas un projet BDD sous J
 
 ## Installation préalable du plug-in JBehave pour Eclipse
 
-JBehave fournit un plugin Eclipse avec un mode éditeur JBehave personnalisé. La documentation est disponible sur : [http://jbehave.org/eclipse-integration.html](http://jbehave.org/eclipse-integration.html). Ce plug-in propose entre autres une coloration syntaxique, une détection de lien hypertexte étape et un lien vers méthode Java correspondante, une autocomplétion, une validation des étapes.
+JBehave fournit un plugin Eclipse avec un mode éditeur JBehave personnalisé. La documentation est disponible sur : [http://jbehave.org/eclipse-integration.html](http://jbehave.org/eclipse-integration.html). Ce plug-in propose entre autres une coloration syntaxique, une détection de lien hypertexte d'une étape textuelle vers la méthode Java correspondante, une autocomplétion, une validation des étapes.
 
 Dans le cadre de ce tutoriel, nous utiliserons donc la version d' **Eclipse IDE for Java Developers** qui peut être téléchargée depuis [http://www.eclipse.org/downloads/] (http://www.eclipse.org/downloads/)
 
@@ -27,10 +27,9 @@ A la fin de l'installation, Eclipse doit redémarrer pour prendre en compte le n
 La mise en place d'un projet BDD sous JBehave se fera en plusieurs étapes :
 
 1. Création d'un projet Maven
-2. Ajout de dépendances Maven (`pom.xml`)
+2. Mise à jour du `pom.xml`
 3. Description textuelle d'une story et de ses scénarios exécutables dans un fichier `nom_story.story`
-4. Configuration de l'environnement de tests des scénarios (fichier java dans `src/test/java`)
-(Implémentation d'un lanceur héritant de [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) ou [`JUnitStories`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStories.html) permettant de  lier les scénarios au code)
+4. Configuration de l'environnement de tests des scénarios (Implémentation d'un lanceur héritant de [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) ou [`JUnitStories`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStories.html) permettant de  lier les scénarios au code : fichier java dans `src/test/java`)
 5. Implémentation du code de test pour chaque étape des scénarios de la story dans un fichier `NomStorySteps.java` (dans `src/test/java`)
 6. Implémentation en TDD du code métier de l'application (dans `src/main/java`)
 
@@ -45,8 +44,8 @@ Saisissez un **groupId** (identifiant de groupe): `fr.cnrs.devlog.jdev` par exem
 Saisissez un **artifactId** (identifiant de composant) : `demobdd` par exemple. L'artifactId correspond au nom unique du projet au sein du groupe qui le développe.
 
 
-###  Mise à jour des dépendances Maven
-
+###  Mise à jour du `pom.xml`
+ 
 Mettez à jour votre `pom.xml` :
 
 - en rajoutant les propriétés `maven.compiler.source` et `maven.compiler.target` avec la version Java 1.7 
@@ -548,7 +547,7 @@ public void thenLeResultatEst(int resultat) {
 ```
 Exécutez `CalculatriceAddition.java` pour vérifier que les tests passent toujours au vert. 
 
-**Remarque** : La partie [Aliases](http://jbehave.org/reference/stable/aliases.html) du tutoriel Jbehave est consacré aux alias. Dans le cas d'alias multiples, il est nécessaire d'utiliser la notation `@Aliases`:
+**Remarque** : La partie [Aliases](http://jbehave.org/reference/stable/aliases.html) du tutoriel Jbehave est consacré aux alias. Dans le cas d'alias multiples, il est nécessaire d'utiliser l'annotation `@Aliases`:
 ```JAVA
 @Then("le resultat doit \u00EAtre \u00E9gal \u00E0 $resultat")
 @Aliases(values={"le resultat est $resultat", 
