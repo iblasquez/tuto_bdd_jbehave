@@ -340,6 +340,7 @@ Une fois ce code implémenté, les scénarios devront être écrits avec des `So
 A partir de deux stories (dans un premier temps toujours dans le dossier `src/test/java'
  - `calculatrice_addition.story` (écrit précdédemment)
  - `calculatrice_mulitplication.story` composé de :
+
 ```
 Narrative:
 In order to pouvoir faire des calculs le plus rapidement possible
