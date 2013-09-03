@@ -198,12 +198,6 @@ L'intérêt d'utiliser une fabrique de [`Steps`](http://jbehave.org/reference/st
 
 
 
-#### 4.2 Lanceur héritant de [`JUnitStories`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStories.html)  pour de multiples
-
-
-```
-à faire
-```
 
 ### 5. Implémentation du code de test pour chaque étape des scénarios de la story dans un fichier `NomStorySteps.java` (dans `src/test/java`)
 Pour JBehave, l'implémentation java des différentes étapes du scénario doit se trouver dans une classe qui implémente l'interface [`CandidateSteps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/CandidateSteps.html).
@@ -338,4 +332,145 @@ public class CalculatriceAddition  extends JUnitStory {
 ```
 
 Une fois ce code implémenté, les scénarios devront être écrits avec des `Soit`, `Quand` et `Alors` (au lieu des `Given`, `When` et `Then`)
+
+
+#### Lanceur héritant de [`JUnitStories`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStories.html)  pour de multiples stories
+
+
+A partir de deux stories (dans un premier temps toujours dans le dossier `src/test/java'
+ - `calculatrice_addition.story` (écrit précdédemment)
+ - `calculatrice_mulitplication.story` composé de :
+``` GHERKIN
+Narrative:
+In order to pouvoir faire des calculs le plus rapidement possible
+As a utilisateur
+I want to utiliser une calculatrice pour multiplier deux nombres
+
+Scenario: Multiplier de deux nombres valides
+Given une calculatrice
+When je multiplie 5 par 2
+Then la solution est 10
+```
+
+
+A partir du fichier `OperationSteps.java` contenant les steps suivantes (il s'agit en fait du fichier `AdditionSteps.java` complété et renommé)
+Remarque : Le code des Steps peut aussi être refactoré durant un développement BDD...
+```JAVA
+public class OperationSteps {
+    private Calculatrice calculatrice;
+  
+    @Given("une calculatrice")
+    public void givenUneCalculatrice() {
+        calculatrice = new Calculatrice();
+    }
+  
+    @When("j'additionne $nombre1 et $nombre2")
+    @Alias("j'additionne <nombre1> et <nombre2>")
+    public void whenAdditionner(@Named("nombre1") int nombre1,
+            @Named("nombre2") int nombre2) {
+        calculatrice.additionner(nombre1, nombre2);
+    }
+  
+    @When("je soustrais $nombre1 moins $nombre2")
+    public void whenSoustraire(@Named("nombre1") int nb1,
+            @Named("nombre2") int nb2) {
+        calculatrice.additionner(nb1, -nb2);
+    }
+      
+    @When("je multiplie $nombre1 par $nombre2")
+    public void whenMultiplier(int nombre1, int nombre2) {
+        calculatrice.multiplier(nombre1, nombre2);
+    }
+  
+    @Then("la somme est <somme>")
+    @Alias("{le resultat|la solution} est $resultat")
+    public void thenLeResultatEst(@Named("somme") int resultat) {
+        Assert.assertEquals(resultat, calculatrice.getResultat());
+    }
+ }
+
+```
+
+
+A partir du fichier `Calculatrice.java` suivant :
+```JAVA
+public class Calculatrice {
+  
+    int resultat;
+  
+    public void additionner(int operande1, int operande2) {
+        resultat = operande1 + operande2;
+  
+    }
+      
+    public void multiplier (int operande1, int operande2) {
+        resultat = operande1 * operande2;
+  
+    }
+  
+  
+    public int getResultat() {
+        return resultat;
+    }
+  
+} 
+```
+
+Les paramétrages précédents utilisés pour un lanceur de story unique restent valables pour notre lanceur multiple c-à-c les méthodes `public Configuration configuration( )` et   `public InjectableStepsFactory stepsFactory()`
+Par contre, la classe `JunitStories` possède une méthode abstraite à rededéfinir `List<String> storyPaths()` qui doit indiquer le chemin d'accès aux stories, puisqu'il n'est plus possible cette fois-ci de se baser sur le nom du lanceur.
+
+Ecrire le fichier `CalculatriceStories.java` suivant :
+```JAVA
+@RunWith(JUnitReportingRunner.class)
+public class CalculatriceStories extends JUnitStories {
+  
+  
+    public Configuration configuration() {
+  
+       Configuration configuration = new MostUsefulConfiguration();
+       	StoryReporterBuilder storyReporterBuilder;
+       	storyReporterBuilder = new StoryReporterBuilder();
+       	storyReporterBuilder.withDefaultFormats();
+       	storyReporterBuilder.withFormats(org.jbehave.core.reporters.Format.CONSOLE);
+       	configuration.useStoryReporterBuilder(storyReporterBuilder);
+        
+	configuration.usePendingStepStrategy(new FailingUponPendingStep());
+	
+	return configuration;
+    }
+  
+  
+    @Override
+    public InjectableStepsFactory stepsFactory() {
+       	return new InstanceStepsFactory(configuration(), new OperationSteps());
+    }
+  
+  
+    @Override
+    protected List<String> storyPaths() {
+       	String codeLocation = CodeLocations.codeLocationFromClass(this.getClass()).getFile();
+       	List<String> storyPaths =  new StoryFinder().findPaths(codeLocation,Arrays.asList("**/*.story"), Arrays.asList(""));
+    return storyPaths;
+     }
+  
+} 
+```
+
+
+
+Lancez `CalculatriceStories.java` . Les tests s'exécutent bien avec le code précédent si les deux fichiers stories `calculatrice_addition.story` et `calculatrice_mulitplication.story` se trouvent dans le dossier `src/test/java`.
+
+
+##### Lanceur pour de multiples stories dans le dossier `target`
+
+Lorsqu'on travaille avec un projet maven, il est d'usage de placer les fichiers `.story` dans le dossier `src/test/resources`.
+Remarque : Pourquoi le dossier `src/test/resources` est_il propice aux fichiers `.story` ?
+Les ressources maven du dossier `src/test/resources`  sont copiées dans le répertoire `target/test-classes` . 
+Si le lanceur est dans un dossier `src/test/java` ou `src/main resources` son byte code (fichier `.class`) se trouvera également dans le répertoire `target/test-classes`.Donc le lanceur et les stories se retouverons dans le même répertoire maven  `target/test-classes` …
+
+
+
+
+
+
 
