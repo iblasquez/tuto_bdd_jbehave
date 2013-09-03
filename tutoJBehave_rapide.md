@@ -340,7 +340,7 @@ Une fois ce code implémenté, les scénarios devront être écrits avec des `So
 A partir de deux stories (dans un premier temps toujours dans le dossier `src/test/java'
  - `calculatrice_addition.story` (écrit précdédemment)
  - `calculatrice_mulitplication.story` composé de :
-``` GHERKIN
+```
 Narrative:
 In order to pouvoir faire des calculs le plus rapidement possible
 As a utilisateur
@@ -416,7 +416,7 @@ public class Calculatrice {
 } 
 ```
 
-Les paramétrages précédents utilisés pour un lanceur de story unique restent valables pour notre lanceur multiple c-à-c les méthodes `public Configuration configuration( )` et   `public InjectableStepsFactory stepsFactory()`
+Les paramétrages précédents utilisés pour un lanceur de story unique restent valables pour notre lanceur multiple c-à-d les méthodes `public Configuration configuration( )` et   `public InjectableStepsFactory stepsFactory()`
 Par contre, la classe `JunitStories` possède une méthode abstraite à rededéfinir `List<String> storyPaths()` qui doit indiquer le chemin d'accès aux stories, puisqu'il n'est plus possible cette fois-ci de se baser sur le nom du lanceur.
 
 Ecrire le fichier `CalculatriceStories.java` suivant :
