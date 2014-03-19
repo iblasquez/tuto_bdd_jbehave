@@ -69,7 +69,7 @@ Mettez à jour votre `pom.xml` :
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-		<JBehave-core.version>3.8</JBehave-core.version>
+		<JBehave-core.version>3.9</JBehave-core.version>
 	</properties>
 
 	<dependencies>
@@ -300,7 +300,7 @@ La configuration actuelle de l'environnment de tests est une configuration minim
 
 En pratique, la configuration usuelle pour créer des classes identifiables comme des [`Steps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/Steps.html) par JBehave consiste plutôt à utiliser à utiliser une fabrique de Steps via la méthode [`stepsFactory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/ConfigurableEmbedder.html#stepsFactory()] qui renvoie une [`InjectableStepsFactory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/InjectableStepsFactory.html) que JBehave va utiliser pour créer les [`CandidateSteps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/CandidateSteps.html) qui sont les classes contenant l'implémentation en java des différentes étapes du scénario.
 
-Tout l'intérêt de cette approche est liée à la simple déclaration de la classe considérée comme [`CandidateSteps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/CandidateSteps.html) qui va ainsi apparaître comme une simple comme une "Plain Old Java Class".
+Tout l'intérêt de cette approche est liée à la simple déclaration de la classe considérée comme [`CandidateSteps`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/steps/CandidateSteps.html) qui va ainsi apparaître comme une simple "Plain Old Java Class".
 
 Pour transformer votre projet en ce sens, vous devez modifier la classe `CalculatriceAddition` en redéfinissant la méthode `stepsFactory`, ce qui vous amène à supprimer dans le constructeur l'appel à `candidateSteps` pour vous amener vers un code semblable au suivant :
 
@@ -727,7 +727,7 @@ Il est donc important de pouvoir configurer les mots clés de Jbehave dans une a
 La partie Configurable Elements du chapitre [Configuration](http://jbehave.org/reference/stable/configuration.html) du tutoriel Jbehave indique qu'il est possible de configurer les mots clés ([Keywords](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/configuration/Keywords.html)).
 
 Voici une méthode simple pour personnaliser vos mots clés et faciliter l'écriture et la compréhension de vos scénarios.
-Il suffit de modifier la configuration via la méthode `public Configuration useKeywords(Keywords keywords)` qui prendra en paramètres vos propores mots clés.
+Il suffit de modifier la configuration via la méthode `public Configuration useKeywords(Keywords keywords)` qui prendra en paramètres vos propres mots clés.
 
 Les modifications à effectuer pour mettre en place une internationalisation des mots clés concerne donc le lanceur de story c-à-d la classe `CalculatriceAddition.java`
 
