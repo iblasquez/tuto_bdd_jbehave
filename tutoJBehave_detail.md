@@ -196,7 +196,7 @@ Pour l'instant vous n'avez créé qu'une seule story, le lanceur qui hérite de 
 Attention par défaut le lanceur (fichier `.java`) supposera qu'il existe dans le même répertoire un fichier contenant les scénarios textuels (fichier `.story`) ayant le même nom mais avec une casse différente : les majuscules de la casse CamelCase du nom du fichier `.java` devenant des minuscules précédées d'un underscore (hormis la première) dans le nom du fichier `.story`.
 Ainsi pour un lanceur nommé `NomStory.java`, JBehave cherchera, par défaut dans le même paquetage, à lancer le fichier de scénarios `nom_story.story`. S'il ne le trouve pas, il générera une erreur. Pour le lanceur, il est donc important de respecter la casse et l'emplacement lorsque [`JUnitStory`](http://jbehave.org/reference/stable/javadoc/core/org/jbehave/core/junit/JUnitStory.html) est utilisé.
 
-Dans le package de `src/test/java` qui contient déjà le fichier de scénarios `calculatrice_addtition.story`, créez et implémentez le lanceur `CalculatriceAddition.java` de la manière suivante :
+Dans le package de `src/test/java` qui contient déjà le fichier de scénarios `calculatrice_addition.story`, créez et implémentez le lanceur `CalculatriceAddition.java` de la manière suivante :
 
 ```JAVA
 package fr.cnrs.devlog.jdev.demobdd;
