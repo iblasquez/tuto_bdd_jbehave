@@ -262,7 +262,7 @@ La classe [MostUsefulConfiguration](http://jbehave.org/reference/stable/javadoc/
 
 Exécutez la classe  `CalculatriceAddition.java` afin de vous assurer que vous visualisez bien désormais le contenu du rapport dans la console. Nous reviendrons sur le contenu dans la suite du tutoriel.
 
-##### Visualisation du contenu du rapport JBehave dans la vue JUnit
+<!-- ##### Visualisation du contenu du rapport JBehave dans la vue JUnit
 La vue JUnit ne propose pour l'instant qu'une barre verte. Pour identifier à quelle étape un scénario échoue, il serait plus confortable de pouvoir visualiser chaque étape de chaque scénario comme un test spécifique directement dans la vue JUnit. Le projet [jbehave-junit-runner](https://github.com/codecentric/jbehave-junit-runner) permet d'obtenir ce résultat. Le site de ce projet est : [https://github.com/codecentric/jbehave-junit-runner] (https://github.com/codecentric/jbehave-junit-runner) 
 
 Pour pouvoir utiliser [jbehave-junit-runner](https://github.com/codecentric/jbehave-junit-runner) dans votre projet, vous devez juste rajouter une dépendance maven dans votre fichier `pom.xml`
@@ -277,6 +277,7 @@ Pour pouvoir utiliser [jbehave-junit-runner](https://github.com/codecentric/jbeh
 Pour indiquer à votre environnement de tests que vous souhaitez disposer des rapports dans la vue JUnit, il vous suffit juste d'annoter par `@RunWith(JUnitReportingRunner.class)` les classes concernées, c'est-à-dire les classes héritant de `JUnitStory` ou de `JunitStories`.
  
 Dans la classe `CalculatriceAddition` de votre projet, ajoutez l'annotation `@RunWith` ainsi que les imports nécessaires pour pouvoir utiliser [jbehave-junit-runner](https://github.com/codecentric/jbehave-junit-runner).
+
 
 ```JAVA
 import org.junit.runner.RunWith;
@@ -293,7 +294,7 @@ Exécutez et consultez la vue JUnit qui propose maintenant des informations plus
 
 Un rapport au format HTML nommé `reports.html` est disponible après l'exécution des scénarios dans le répertoire : `target/jbehave/view`. 
 Il est possibe d'améliorer la présentation de ce rapport, nous ne le ferons pas dans le cadre de ce tutoriel....
-
+-->
 
 #### Utilisation d'une StepsFactory 
 La configuration actuelle de l'environnment de tests est une configuration minimale qui vous permettrait de commencer un développement BDD.
@@ -305,7 +306,6 @@ Tout l'intérêt de cette approche est liée à la simple déclaration de la cla
 Pour transformer votre projet en ce sens, vous devez modifier la classe `CalculatriceAddition` en redéfinissant la méthode `stepsFactory`, ce qui vous amène à supprimer dans le constructeur l'appel à `candidateSteps` pour vous amener vers un code semblable au suivant :
 
 ```JAVA
-@RunWith(JUnitReportingRunner.class)
 public class CalculatriceAddition extends JUnitStory {
 
 	public CalculatriceAddition() {
